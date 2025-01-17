@@ -9,19 +9,6 @@ API_URL = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symb
 
 current_line = 0 
 
-CREATE_TABLE_QUERY = """
-CREATE TABLE IBM_STOCK (
-    time DATETIME NOT NULL,
-    open FLOAT NOT NULL,
-    high FLOAT NOT NULL,
-    low FLOAT NOT NULL,
-    close FLOAT NOT NULL,
-    volume FLOAT NOT NULL,
-    symbol VARCHAR(40),
-    event_time DATETIME DEFAULT NOW(),
-    PRIMARY KEY (time)
-);
-"""
 
 INSERT_QUERY = """
 INSERT IGNORE INTO IBM_STOCK (time, open, high, low, close, volume, symbol)
@@ -37,18 +24,6 @@ mysql_connection = mysql.connector.connect(
     database="STOCK_STREAMING"
 )
 cursor = mysql_connection.cursor()  # Create a cursor
-
-# Check if the table exists; if not, create it
-cursor.execute("SHOW TABLES LIKE 'IBM_STOCK'")
-result = cursor.fetchone()
-
-if result:
-    print("Table 'IBM_STOCK' already exists.")
-else:
-    cursor.execute(CREATE_TABLE_QUERY)
-    mysql_connection.commit()
-    print("Table 'IBM_STOCK' has been created successfully.")
-
 
 @app.route("/")
 def home():
