@@ -1,0 +1,7 @@
+boto3
+pandas
+mysql-connector-python
+flask
+requests
+uvicorn
+uuid
