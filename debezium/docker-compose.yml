@@ -1,0 +1,43 @@
+version: '3'
+services:
+  zookeeper:
+    image: quay.io/debezium/zookeeper:3.0
+    ports:
+     - 2181:2181
+     - 2888:2888
+     - 3888:3888
+    networks:
+      - debeziumnet
+
+  kafka:
+    image: quay.io/debezium/kafka:3.0
+    depends_on:
+      - zookeeper
+    ports:
+     - 9092:9092
+    environment:
+     - ZOOKEEPER_CONNECT=zookeeper:2181
+    networks:
+      - debeziumnet
+
+
+  connect:
+    image: quay.io/debezium/connect:3.0
+    ports:
+     - 8083:8083
+    depends_on:
+      - kafka
+    environment:
+     - BOOTSTRAP_SERVERS=kafka:9092
+     - GROUP_ID=1
+     - CONFIG_STORAGE_TOPIC=my_connect_configs
+     - OFFSET_STORAGE_TOPIC=my_connect_offsets
+     - STATUS_STORAGE_TOPIC=my_connect_statuses
+    networks:
+      - debeziumnet        
+
+
+networks:
+  debeziumnet:
+    name: client_network
+    external: true
