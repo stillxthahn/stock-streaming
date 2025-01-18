@@ -1,4 +1,3 @@
-version: "3"
 services:
   app:
     container_name: app
@@ -8,9 +7,7 @@ services:
     links:
       - mysql
     ports:
-      - "8000:8000"
-    networks:
-      - clientnet
+      - 8000:8000
     restart: on-failure
 
 
@@ -23,9 +20,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
-    networks:
-      - clientnet
+      - 3306:3306
     restart: on-failure
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
@@ -33,8 +28,3 @@ services:
       timeout: 5s
       retries: 5
       start_period: 60s
-
-    
-networks:
-  clientnet:
-    name: client_network
