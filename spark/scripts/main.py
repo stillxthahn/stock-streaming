@@ -1,5 +1,4 @@
 import os
-from botocore.exceptions import ClientError
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
