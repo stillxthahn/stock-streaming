@@ -1,21 +1,38 @@
+import os
+from botocore.exceptions import ClientError
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
 from pyspark.sql.types import StringType, StructType, StructField, LongType, DoubleType, IntegerType, BooleanType, NullType
 
-
-kafka_brokers = "debezium-kafka-1:9092"  
-kafka_topic = "dbserver1.STOCK_STREAMING.IBM_STOCK"
-
+KAFKA_BROKERS = os.environ.get("KAFKA_BROKERS")
+KAFKA_TOPICS = os.environ.get("KAFKA_TOPICS")
+REGION = os.environ.get("REGION")
+SECRET_NAME = os.environ.get("SECRET_NAME")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+print("AWS_ACCESS_KEY_ID",AWS_ACCESS_KEY_ID)
+s3_bucket = "ibm-stock"
+s3_prefix = "streaming-data"
+s3_output_path = f"s3a://{s3_bucket}/{s3_prefix}"
+print("s3_output_path",s3_output_path)
 spark = SparkSession \
     .builder \
     .appName("StockAnalyze") \
+    .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.apache.hadoop:hadoop-aws:3.3.2") \
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+    .config("spark.hadoop.fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
+    .config("spark.hadoop.fs.s3a.access.key", AWS_ACCESS_KEY_ID) \
+    .config("spark.hadoop.fs.s3a.secret.key", AWS_SECRET_ACCESS_KEY) \
     .getOrCreate()
+    # .config("spark.hadoop.fs.s3a.endpoint", s3_output_path) \
+
 
 df = spark \
   .readStream \
   .format("kafka") \
-  .option("kafka.bootstrap.servers", kafka_brokers) \
-  .option("subscribe", kafka_topic) \
+  .option("kafka.bootstrap.servers", KAFKA_BROKERS) \
+  .option("subscribe", KAFKA_TOPICS) \
   .option("startingOffsets", "earliest") \
   .load()
 
@@ -70,28 +87,29 @@ parsed_df.createOrReplaceTempView("stock_view")
 
 filtered_df = spark.sql("""
     SELECT 
-        stock_view.after.time,
-        stock_view.after.open,
-        stock_view.after.high,
-        stock_view.after.low,
-        stock_view.after.close,
-        stock_view.after.volume,
-        stock_view.after.symbol,
-        stock_view.after.event_time,
-        stock_view.source.connector,
-        stock_view.source.name,
-        stock_view.source.db,
-        stock_view.source.table,
-        stock_view.source.file
+        after.time AS time,
+        after.open AS open,
+        after.high AS high,
+        after.low AS low,
+        after.close AS close,
+        after.volume AS volume,
+        after.symbol AS symbol,
+        after.event_time AS event_time,
+        source.connector AS connector,
+        source.name AS source_name,
+        source.db AS db,
+        source.table AS table_name,
+        source.file AS file_name
     FROM stock_view
 """)
 
-# Hiển thị kết quả
-# parsed_df.show(truncate=False)
 
 query = filtered_df.writeStream \
+    .format("csv") \
+    .option("header", "true") \
     .outputMode("append") \
-    .format("console") \
-    .start()
+    .option("checkpointLocation", "/tmp/spark-checkpoints/stock") \
+    .start(s3_output_path)
+
 
 query.awaitTermination()
