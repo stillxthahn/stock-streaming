@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.5">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.6">
   <diagram name="Trang-1" id="CE-0hZz67_L6dIzVgs5u">
-    <mxGraphModel dx="2473" dy="426" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2993" dy="597" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -83,7 +83,7 @@
             <mxPoint x="370" y="1290.0000000000002" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ypYvv4vw_HAr2LhjokS0-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="23G69L1_6s5JdzTNbJ2y-1">
+        <mxCell id="ypYvv4vw_HAr2LhjokS0-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="23G69L1_6s5JdzTNbJ2y-1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="370" y="1530" as="targetPoint" />
           </mxGeometry>
@@ -136,19 +136,46 @@
           <mxGeometry x="-860" y="1453" width="1124" height="301" as="geometry" />
         </mxCell>
         <mxCell id="tmSWfVcpKPODpcX_pc05-1" value="&lt;div&gt;Standalone&lt;/div&gt;&lt;div&gt;When a single MySQL server is used, the server must have the binlog enabled so the Debezium MySQL connector can monitor the server.&lt;/div&gt;&lt;div&gt;This is often acceptable, since the binary log can also be used as an incremental backup.&lt;/div&gt;&lt;div&gt;In this case, the MySQL connector always connects to and follows this standalone MySQL server instance.&lt;/div&gt;" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1420" y="1360" width="750" height="60" as="geometry" />
+          <mxGeometry x="866" y="1510" width="750" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ypYvv4vw_HAr2LhjokS0-1" value="&lt;font style=&quot;font-size: 50px;&quot;&gt;Debezium Architecture&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="ypYvv4vw_HAr2LhjokS0-1" value="&lt;font style=&quot;font-size: 50px;&quot;&gt;Debezium Architecture&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="680" y="1650" width="530" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="ypYvv4vw_HAr2LhjokS0-2" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://debezium.io/documentation/reference/stable/_images/debezium-architecture.png;" vertex="1" parent="1">
+        <mxCell id="ypYvv4vw_HAr2LhjokS0-2" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://debezium.io/documentation/reference/stable/_images/debezium-architecture.png;" parent="1" vertex="1">
           <mxGeometry x="390" y="1730" width="1200" height="273" as="geometry" />
         </mxCell>
-        <mxCell id="ypYvv4vw_HAr2LhjokS0-4" value="Kafka connect: cung cấp REST API để quản lí các connectors - là các plugins. Configure trong&amp;nbsp;&lt;span style=&quot;background-color: initial; font-family: Consolas, Monaco, &amp;quot;Andale Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, monospace; font-size: 1em; word-spacing: normal; text-align: left; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;connect config&lt;/span&gt;&lt;div&gt;Debezium connectors MySQL: thực ra là 1 plugin ở Kafka connect. Dùng Kafka connect để POST &lt;b&gt;configure &lt;/b&gt;này lên kafka connect&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="ypYvv4vw_HAr2LhjokS0-4" value="Kafka connect: cung cấp REST API để quản lí các connectors - là các plugins. Configure trong&amp;nbsp;&lt;span style=&quot;background-color: initial; font-family: Consolas, Monaco, &amp;quot;Andale Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, monospace; font-size: 1em; word-spacing: normal; text-align: left; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;connect config&lt;/span&gt;&lt;div&gt;Debezium connectors MySQL: thực ra là 1 plugin ở Kafka connect. Dùng Kafka connect để POST &lt;b&gt;configure &lt;/b&gt;này lên kafka connect&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="200" y="2033" width="720" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ypYvv4vw_HAr2LhjokS0-6" value="API: Docker build trước rồi gắn vào docker compose&lt;br&gt;Dùng packer để tạo AMI chạy docker compose này" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="ypYvv4vw_HAr2LhjokS0-6" value="API: Docker build trước rồi gắn vào docker compose&lt;br&gt;Dùng packer để tạo AMI chạy docker compose này" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="210" y="1553" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="aj0lGEkERWwBzE9fizp8-1" value="Glue crawlers" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1380" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="aj0lGEkERWwBzE9fizp8-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1400" y="1409.6000000000001" as="targetPoint" />
+            <mxPoint x="1300" y="1409.6" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aj0lGEkERWwBzE9fizp8-3" value="Data log" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="1380" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="aj0lGEkERWwBzE9fizp8-4" value="Athena" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1840" y="1380" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="aj0lGEkERWwBzE9fizp8-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1620" y="1409.6000000000001" as="targetPoint" />
+            <mxPoint x="1520" y="1409.6" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aj0lGEkERWwBzE9fizp8-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1840" y="1409.6000000000001" as="targetPoint" />
+            <mxPoint x="1740" y="1409.6" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
