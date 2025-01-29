@@ -1,9 +1,16 @@
 variable "environment_name" {
   default = "dev"
 }
-
 variable "name" {
   default = "stockstreaming"
+}
+
+variable "prefix" {
+  default = "dev"
+}
+
+variable "separator" {
+  default = "-"
 }
 
 variable "region" {

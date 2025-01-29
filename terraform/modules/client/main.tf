@@ -1,7 +1,9 @@
-locals {
-  base_name = "${var.prefix}${var.separator}${var.name}"
-}
+module "ec2_client" {
+  source = "terraform-aws-modules/ec2-instance/aws"
 
-resource "aws_ec2" "main" {
+  name = var.name
 
+  instance_type = "t2.micro"
+  # vpc_security_group_ids = ["sg-12345678"]
+  subnet_id = var.public_subnet_id
 }
