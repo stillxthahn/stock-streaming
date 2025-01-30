@@ -1,7 +1,8 @@
 module "ec2_client" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
-  name = var.name
+  name     = var.name
+  key_name = "client"
 
   instance_type = "t2.micro"
   # vpc_security_group_ids = ["sg-12345678"]

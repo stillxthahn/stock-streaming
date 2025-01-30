@@ -3,7 +3,7 @@
 sudo apt update -y 
 
 echo "Docker.io installing..."
-sudo apt install docker.io
+sudo apt install docker.io -y
 sudo systemctl start docker
 sudo systemctl enable docker
 echo "Docker.io installed successfully"
@@ -18,12 +18,8 @@ git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/client
 echo "Cloning successfully..."
 
-# echo "Nginx installing..."
-# sudo apt install nginx
-# echo "Nginx installed successfully"
-
 echo "Starting the docker-compose..."
-docker-compose up -d
+sudo docker-compose up -d
 echo "Docker-compose started successfully"
 
 
