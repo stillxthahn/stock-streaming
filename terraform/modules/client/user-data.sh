@@ -16,5 +16,3 @@ echo "Cloning successfully..."
 echo "Starting the docker-compose..."
 sudo docker-compose up -d
 echo "Docker-compose started successfully"
-
-
