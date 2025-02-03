@@ -54,4 +54,13 @@ module "client" {
   public_subnet_id = module.vpc.public_subnets[0]
 }
 
+module "debezium" {
+  source = "./modules/debezium"
+
+  name = local.base_name
+
+  region            = var.region
+  vpc_id            = module.vpc.vpc_id
+  private_subnet_id = module.vpc.private_subnets[0]
+}
 
