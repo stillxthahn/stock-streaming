@@ -9,11 +9,26 @@ resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_ipv4" {
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_internal" {
+  security_group_id            = aws_security_group.debezium-sg.id
+  cidr_ipv4                    = "0.0.0.0/0"
+  ip_protocol                  = "-1" # semantically equivalent to all ports
+  referenced_security_group_id = var.client_sg_id
+}
+
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   security_group_id = aws_security_group.debezium-sg.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_external" {
+  security_group_id            = aws_security_group.debezium-sg.id
+  cidr_ipv4                    = "0.0.0.0/0"
+  ip_protocol                  = "-1" # semantically equivalent to all ports
+  referenced_security_group_id = var.client_sg_id
+}
+
 
 # resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
 #   security_group_id = aws_security_group.debezium-sg.id
@@ -99,5 +114,7 @@ module "ec2_client" {
   vpc_security_group_ids = [aws_security_group.debezium-sg.id]
   instance_type          = "t2.micro"
 
-  user_data_base64 = base64encode(file("modules/debezium/init.sh"))
+  user_data_base64 = base64encode(templatefile("modules/debezium/init.sh.tpl", {
+    CLIENT_IP = var.client_private_ip
+  }))
 }

@@ -62,5 +62,8 @@ module "debezium" {
   region            = var.region
   vpc_id            = module.vpc.vpc_id
   private_subnet_id = module.vpc.private_subnets[0]
+
+  client_private_ip = module.client.ec2_client_instance_private_ip #Privte client's IP
+  client_sg_id      = module.client.ec2_client_sg_id
 }
 
