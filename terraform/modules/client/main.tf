@@ -91,7 +91,7 @@ data "aws_ami" "ubuntu" {
 module "ec2_client" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
-  name = var.name
+  name = "${var.name}-client"
 
   ami = data.aws_ami.ubuntu.id
 
