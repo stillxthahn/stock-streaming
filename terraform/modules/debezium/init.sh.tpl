@@ -17,7 +17,7 @@ echo "Cloning successfully..."
 echo "Starting the docker-compose..."
 sudo docker-compose up -d
 echo "Docker-compose started successfully"
-sudo docker exec debezium-kafka-1 bin/kafka-console-consumer.sh --bootstrap-server debezium-kafka-1:9092 --topic dbserver1.STOCK_STREAMING.IBM_STOCK --from-beginning
+sudo docker exec -it debezium-kafka-1 bin/kafka-console-consumer.sh --bootstrap-server debezium-kafka-1:9092 --topic dbserver1.STOCK_STREAMING.IBM_STOCK --from-beginning
 sudo curl -X POST -H "Content-Type: application/json" \
     --data "{
       \"name\": \"stock-connector\",
