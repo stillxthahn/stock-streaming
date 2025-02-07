@@ -5,8 +5,8 @@ services:
      - 2181:2181
      - 2888:2888
      - 3888:3888
-    networks:
-      - client_default
+    # networks:
+    #   - client_default
 
   kafka:
     image: quay.io/debezium/kafka:3.0
@@ -18,8 +18,8 @@ services:
      - 9092:9092
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
-    networks:
-      - client_default
+    # networks:
+    #   - client_default
 
 
   connect:
@@ -37,9 +37,9 @@ services:
      - CONFIG_STORAGE_TOPIC=my_connect_configs
      - OFFSET_STORAGE_TOPIC=my_connect_offsets
      - STATUS_STORAGE_TOPIC=my_connect_statuses
-    networks:
-      - client_default
+    # networks:
+    #   - client_default
 
-networks:
-  client_default:
-    external: true
+# networks:
+#   client_default:
+#     external: true
