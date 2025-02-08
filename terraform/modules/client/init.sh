@@ -14,5 +14,5 @@ git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/client
 echo "Cloning successfully..."
 echo "Starting the docker-compose..."
-sudo docker-compose up -d
+sudo docker-compose up
 echo "Docker-compose started successfully"
