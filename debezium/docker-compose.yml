@@ -18,6 +18,7 @@ services:
      - 9092:9092
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
+    #  - ADVERTISED_HOST_NAME=0.0.0.0
     # networks:
     #   - client_default
 
@@ -37,6 +38,7 @@ services:
      - CONFIG_STORAGE_TOPIC=my_connect_configs
      - OFFSET_STORAGE_TOPIC=my_connect_offsets
      - STATUS_STORAGE_TOPIC=my_connect_statuses
+     - HOST_NAME=0.0.0.0
     # networks:
     #   - client_default
 
