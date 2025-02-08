@@ -15,7 +15,7 @@ services:
     depends_on:
       - zookeeper
     ports:
-     - 9092:9092
+     - 0.0.0.0:9092:9092
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=BROKER:PLAINTEXT,SSL:SSL,CONTROLLER:PLAINTEXT
@@ -30,7 +30,7 @@ services:
     links:
      - kafka
     ports:
-     - 8083:8083
+     - 0.0.0.0:8083:8083
     depends_on:
       - kafka
       - zookeeper
