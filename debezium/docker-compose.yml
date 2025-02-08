@@ -15,12 +15,9 @@ services:
     depends_on:
       - zookeeper
     ports:
-     - 0.0.0.0:9092:9092
+     - 9092:9092
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
-     - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=BROKER:PLAINTEXT,SSL:SSL,CONTROLLER:PLAINTEXT
-     - KAFKA_LISTENERS=BROKER://0.0.0.0:9093,SSL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9094
-     - KAFKA_ADVERTISED_LISTENERS=SSL://localhost:9092,BROKER://localhost:9093
     # networks:
     #   - client_default
 
@@ -30,16 +27,16 @@ services:
     links:
      - kafka
     ports:
-     - 0.0.0.0:8083:8083
+     - 8083:8083
     depends_on:
       - kafka
       - zookeeper
     environment:
-      - BOOTSTRAP_SERVERS=localhost:9092
-      - GROUP_ID=1
-      - CONFIG_STORAGE_TOPIC=my_connect_configs
-      - OFFSET_STORAGE_TOPIC=my_connect_offsets
-      - STATUS_STORAGE_TOPIC=my_connect_statuses
+     - BOOTSTRAP_SERVERS=kafka:9092
+     - GROUP_ID=1
+     - CONFIG_STORAGE_TOPIC=my_connect_configs
+     - OFFSET_STORAGE_TOPIC=my_connect_offsets
+     - STATUS_STORAGE_TOPIC=my_connect_statuses
     # networks:
     #   - client_default
 
