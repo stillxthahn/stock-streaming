@@ -16,6 +16,7 @@ cd stock-streaming/debezium
 echo "Cloning successfully..."
 echo "Starting the docker-compose..."
 sudo docker-compose up -d
+sudo sleep 30
 echo "Docker-compose started successfully"
 sudo docker ps -a
 echo "Target EC2 IP: ${CLIENT_IP}" 
@@ -25,7 +26,7 @@ echo "Target EC2 IP: ${CLIENT_IP}"
 # localhost -> curl: (52) Empty reply from server
 # 127.0.0.1
 
-export HOST_IP=$$(curl -s https://checkip.amazonaws.com/)
+export HOST_IP=$(curl -s https://checkip.amazonaws.com/)
 echo "curl -L $${HOST_IP}:8083/connectors/"
 sudo curl -L $${HOST_IP}:8083/connectors/
 
