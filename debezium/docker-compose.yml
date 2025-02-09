@@ -1,3 +1,4 @@
+version: "3"
 services:
   zookeeper:
     image: quay.io/debezium/zookeeper:3.0
@@ -5,6 +6,7 @@ services:
      - 2181:2181
      - 2888:2888
      - 3888:3888
+    network_mode: host
     # networks:
     #   - client_default
 
@@ -18,6 +20,7 @@ services:
      - 9092:9092
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
+    network_mode: host
     #  - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=BROKER:PLAINTEXT,SSL:SSL,CONTROLLER:PLAINTEXT
     #  - KAFKA_LISTENERS=BROKER://0.0.0.0:9093,SSL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9094
     #  - KAFKA_ADVERTISED_LISTENERS=SSL://localhost:9092,BROKER://localhost:9093
@@ -41,6 +44,7 @@ services:
      - CONFIG_STORAGE_TOPIC=my_connect_configs
      - OFFSET_STORAGE_TOPIC=my_connect_offsets
      - STATUS_STORAGE_TOPIC=my_connect_statuses
+    network_mode: host
     #  - HOST_NAME=localhost
     # networks:
     #   - client_default
