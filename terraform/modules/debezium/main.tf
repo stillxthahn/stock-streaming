@@ -25,6 +25,13 @@ resource "aws_vpc_security_group_ingress_rule" "allow_all_udp_ipv4" {
   to_port           = 65535
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_ipv4" {
+  security_group_id = aws_security_group.debezium-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
+
 resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_internal" {
   security_group_id = aws_security_group.debezium-sg.id
   # cidr_ipv4                    = "0.0.0.0/0"

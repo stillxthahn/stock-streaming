@@ -25,6 +25,7 @@ echo "Target EC2 IP: ${CLIENT_IP}"
 # 0.0.0.0 -> curl: (52) Empty reply from server
 # localhost -> curl: (52) Empty reply from server
 # 127.0.0.1
+# HOST_IP -> connection refused
 
 export HOST_IP=$(curl -s https://checkip.amazonaws.com/)
 echo "curl -L $${HOST_IP}:8083/connectors/"
