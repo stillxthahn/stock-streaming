@@ -122,6 +122,8 @@ resource "aws_instance" "client" {
     script = "modules/client/init.sh"
   }
 
+  # Add user_data
+
   tags = {
     Name = "${var.name}-client"
   }
