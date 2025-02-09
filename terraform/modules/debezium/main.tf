@@ -113,10 +113,4 @@ module "ec2_client" {
   user_data = templatefile("modules/debezium/init.sh.tpl", {
     CLIENT_IP = var.client_private_ip
   })
-  # user_data = <<-EOF
-  #   #!/bin/bash
-  #   sudo aws s3 cp "$${var.s3_path}" /home/ubuntu/install.sh
-  #   sudo chmod +x /home/ubuntu/install.sh
-  #   sudo bash /home/ubuntu/install.sh
-  # EOF
 }
