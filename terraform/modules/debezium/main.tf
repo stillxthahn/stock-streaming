@@ -89,22 +89,22 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-# resource "tls_private_key" "pk" {
-#   algorithm = "RSA"
-#   rsa_bits  = 4096
-# }
+resource "tls_private_key" "pk" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 
-# resource "aws_key_pair" "kp" {
-#   key_name   = "myKey" # Create a "myKey" to AWS!!
-#   public_key = tls_private_key.pk.public_key_openssh
+resource "aws_key_pair" "kp" {
+  key_name   = "myKey" # Create a "myKey" to AWS!!
+  public_key = tls_private_key.pk.public_key_openssh
 
-# }
+}
 
-# resource "local_file" "ssh_key" {
-#   filename        = "${aws_key_pair.kp.key_name}.pem"
-#   content         = tls_private_key.pk.private_key_pem
-#   file_permission = "0400"
-# }
+resource "local_file" "ssh_key" {
+  filename        = "${aws_key_pair.kp.key_name}.pem"
+  content         = tls_private_key.pk.private_key_pem
+  file_permission = "0400"
+}
 
 module "ec2_client" {
   source = "terraform-aws-modules/ec2-instance/aws"

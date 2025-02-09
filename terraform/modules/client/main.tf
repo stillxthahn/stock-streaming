@@ -72,6 +72,21 @@ resource "aws_vpc_security_group_ingress_rule" "allow_all_udp_ipv4" {
 #   to_port           = 22
 # }
 
+resource "tls_private_key" "pk" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "kp" {
+  key_name   = "${var.name}-kp" # Create a "myKey" to AWS!!
+  public_key = tls_private_key.pk.public_key_openssh
+}
+
+# resource "local_file" "ssh_key" {
+#   filename        = "${aws_key_pair.kp.key_name}.pem"
+#   content         = tls_private_key.pk.private_key_pem
+#   file_permission = "0400"
+# }
 
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -88,16 +103,28 @@ data "aws_ami" "ubuntu" {
 }
 
 
-module "ec2_client" {
-  source = "terraform-aws-modules/ec2-instance/aws"
-
-  name = "${var.name}-client"
-
-  ami = data.aws_ami.ubuntu.id
-
+resource "aws_instance" "client" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t2.micro"
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [aws_security_group.client-sg.id]
-  instance_type          = "t2.micro"
 
-  user_data_base64 = base64encode(file("modules/client/init.sh"))
+  key_name = aws_key_pair.kp.key_name
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    host        = self.public_ip
+    private_key = tls_private_key.pk.private_key_pem
+  }
+
+  provisioner "remote-exec" {
+    script = "modules/client/init.sh"
+  }
+
+  tags = {
+    Name = "${var.name}-client"
+  }
+
 }
+

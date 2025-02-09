@@ -25,3 +25,7 @@ variable "account_id" {
   default = "381492111228"
 }
 
+variable "client_ami_id" {
+  default = "ami-0aaaa55dd4c971421"
+}
+

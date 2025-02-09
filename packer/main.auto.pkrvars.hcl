@@ -1,0 +1,6 @@
+environment_name = "dev"
+name             = "stockstreaming"
+separator        = "-"
+region           = "us-east-1"
+vpc_id           = "vpc-09322124a00f04b4b"
+subnet_id        = "subnet-0ed97847693b2c324"
