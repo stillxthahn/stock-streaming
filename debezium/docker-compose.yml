@@ -7,6 +7,7 @@ services:
      - 3888:3888
     # networks:
     #   - client_default
+    network_mode: "host"   
 
   kafka:
     image: quay.io/debezium/kafka:3.0
@@ -20,7 +21,7 @@ services:
      - ZOOKEEPER_CONNECT=zookeeper:2181
      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-
+    network_mode: "host"   
     # networks:
     #   - client_default
 
@@ -40,6 +41,7 @@ services:
      - CONFIG_STORAGE_TOPIC=my_connect_configs
      - OFFSET_STORAGE_TOPIC=my_connect_offsets
      - STATUS_STORAGE_TOPIC=my_connect_statuses
+    network_mode: "host"   
     #  - HOST_NAME=localhost
     # networks:
     #   - client_default

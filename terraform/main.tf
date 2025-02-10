@@ -58,28 +58,17 @@ module "client" {
   public_subnet_id = module.vpc.public_subnets[0]
 }
 
+module "debezium" {
+  source = "./modules/debezium"
 
-# resource "aws_s3_object" "debezium" {
-#   bucket = aws_s3_bucket.init.id
-#   key    = "debezium-init-script"
-#   content = templatefile("modules/debezium/init.sh.tpl", {
-#     CLIENT_IP = module.client.ec2_client_instance_private_ip
-#   })
-# }
+  name = local.base_name
 
+  region = var.region
+  vpc_id = module.vpc.vpc_id
+  # private_subnet_id = module.vpc.private_subnets[0]
+  private_subnet_id = module.vpc.public_subnets[1]
 
-
-# module "debezium" {
-#   source = "./modules/debezium"
-
-#   name = local.base_name
-
-#   region = var.region
-#   vpc_id = module.vpc.vpc_id
-#   # private_subnet_id = module.vpc.private_subnets[0]
-#   private_subnet_id = module.vpc.public_subnets[1]
-
-#   client_private_ip = module.client.ec2_client_instance_private_ip #Privte client's IP
-#   client_sg_id      = module.client.ec2_client_sg_id
-# }
+  client_private_ip = module.client.client_private_ip #Privte client's IP
+  client_sg_id      = module.client.client_sg_id
+}
 

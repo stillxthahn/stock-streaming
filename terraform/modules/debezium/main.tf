@@ -95,29 +95,58 @@ resource "tls_private_key" "pk" {
 }
 
 resource "aws_key_pair" "kp" {
-  key_name   = "myKey" # Create a "myKey" to AWS!!
+  key_name   = "${var.name}-debezium-kp" # Create a "myKey" to AWS!!
   public_key = tls_private_key.pk.public_key_openssh
-
 }
 
-resource "local_file" "ssh_key" {
-  filename        = "${aws_key_pair.kp.key_name}.pem"
-  content         = tls_private_key.pk.private_key_pem
-  file_permission = "0400"
-}
+# module "ec2_client" {
+#   source = "terraform-aws-modules/ec2-instance/aws"
 
-module "ec2_client" {
-  source = "terraform-aws-modules/ec2-instance/aws"
+#   name = "${var.name}-debezium"
+#   # key_name = aws_key_pair.kp.key_name
+#   ami = data.aws_ami.ubuntu.id
 
-  name = "${var.name}-debezium"
-  # key_name = aws_key_pair.kp.key_name
-  ami = data.aws_ami.ubuntu.id
+#   subnet_id              = var.private_subnet_id
+#   vpc_security_group_ids = [aws_security_group.debezium-sg.id]
+#   instance_type          = "t2.medium"
 
+#   user_data = templatefile("modules/debezium/init.sh.tpl", {
+#     CLIENT_IP = var.client_private_ip
+#   })
+# }
+
+resource "aws_instance" "debezium" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t2.medium"
   subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [aws_security_group.debezium-sg.id]
-  instance_type          = "t2.medium"
 
-  user_data = templatefile("modules/debezium/init.sh.tpl", {
-    CLIENT_IP = var.client_private_ip
-  })
+  key_name = aws_key_pair.kp.key_name
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    host        = self.public_ip
+    private_key = tls_private_key.pk.private_key_pem
+  }
+
+  provisioner "file" {
+    destination = "/tmp/init.sh"
+    content = templatefile("modules/debezium/init.sh.tpl", {
+      HOST_IP   = self.public_ip,
+      CLIENT_IP = var.client_private_ip
+    })
+  }
+
+  provisioner "remote-exec" {
+    inline = ["sh /tmp/init.sh"]
+  }
+  # user_data = file("modules/client/init.sh")
+
+  # Add user_data
+
+  tags = {
+    Name = "${var.name}-debezium"
+  }
 }
+
