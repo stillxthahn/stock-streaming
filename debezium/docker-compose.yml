@@ -11,8 +11,8 @@ services:
 
   kafka:
     image: quay.io/debezium/kafka:3.0
-    links:
-     - zookeeper
+    # links:
+    #  - zookeeper
     depends_on:
       - zookeeper
     ports:
@@ -28,8 +28,8 @@ services:
 
   connect:
     image: quay.io/debezium/connect:3.0
-    links:
-     - kafka
+    # links:
+    #  - kafka
     ports:
      - 8083:8083
     depends_on:
