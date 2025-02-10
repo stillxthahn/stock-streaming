@@ -14,7 +14,6 @@ git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/debezium
 sudo docker-compose up -d
 sudo docker ps -a
-sudo curl -l www.google.com
 # localhost -> curl: (56) Recv failure: Connection reset by peer
 # HOST_IP -> curl: connection refused
 sudo curl -L localhost:8083/connectors/

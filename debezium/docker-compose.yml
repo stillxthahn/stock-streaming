@@ -36,15 +36,21 @@ services:
     ports:
      - 8083:8083
     depends_on:
-      - kafka
-      - zookeeper
+      kafka:
+        condition: service_healthy
+      zookeeper:
+        condition: service_started
     environment:
      - BOOTSTRAP_SERVERS=kafka:9092
      - GROUP_ID=1
      - CONFIG_STORAGE_TOPIC=my_connect_configs
      - OFFSET_STORAGE_TOPIC=my_connect_offsets
      - STATUS_STORAGE_TOPIC=my_connect_statuses
-    #  - HOST_NAME=localhost
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost:8083/connectors"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
     # networks:
     #   - client_default
 
