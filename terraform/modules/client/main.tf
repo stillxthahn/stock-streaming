@@ -109,19 +109,19 @@ resource "aws_instance" "client" {
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [aws_security_group.client-sg.id]
 
-  key_name = aws_key_pair.kp.key_name
+  # key_name = aws_key_pair.kp.key_name
 
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    host        = self.public_ip
-    private_key = tls_private_key.pk.private_key_pem
-  }
+  # connection {
+  #   type        = "ssh"
+  #   user        = "ubuntu"
+  #   host        = self.public_ip
+  #   private_key = tls_private_key.pk.private_key_pem
+  # }
 
-  provisioner "remote-exec" {
-    script = "modules/client/init.sh"
-  }
-  # user_data = file("modules/client/init.sh")
+  # provisioner "remote-exec" {
+  #   script = "modules/client/init.sh"
+  # }
+  user_data = file("modules/client/init.sh")
 
   # Add user_data
 

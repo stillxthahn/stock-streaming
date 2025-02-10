@@ -1,11 +1,8 @@
 #!/bin/bash
-until [ -f /var/lib/cloud/instance/boot-finished ]; do
-  sleep 1
-done
-
-
+# until [ -f /var/lib/cloud/instance/boot-finished ]; do
+#   sleep 1
+# done
 echo "Target EC2 IP: ${CLIENT_IP}" 
-echo "HOST IP: ${HOST_IP}" 
 sudo apt update -y 
 sudo apt install docker.io -y
 sudo systemctl start docker
@@ -16,7 +13,6 @@ git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/debezium
 sudo docker-compose up -d
 sudo docker ps -a
-  echo "Kafka connector is unhealthy, retrying in 3s..."
 while [ "$(sudo docker inspect --format "{{.State.Health.Status }}" debezium-connect-1)" != "healthy" ]; do 
 	sleep 3; 
 	echo "Kafka connector is unhealthy, retrying in 3s...";

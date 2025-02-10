@@ -121,29 +121,30 @@ resource "aws_instance" "debezium" {
   subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [aws_security_group.debezium-sg.id]
 
-  key_name = aws_key_pair.kp.key_name
+  # key_name = aws_key_pair.kp.key_name
 
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    host        = self.public_ip
-    private_key = tls_private_key.pk.private_key_pem
-  }
+  # connection {
+  #   type        = "ssh"
+  #   user        = "ubuntu"
+  #   host        = self.public_ip
+  #   private_key = tls_private_key.pk.private_key_pem
+  # }
 
-  provisioner "file" {
-    destination = "/tmp/init.sh"
-    content = templatefile("modules/debezium/init.sh.tpl", {
-      HOST_IP   = self.public_ip,
-      CLIENT_IP = var.client_private_ip
-    })
-  }
+  # provisioner "file" {
+  #   destination = "/tmp/init.sh"
+  #   content = templatefile("modules/debezium/init.sh.tpl", {
+  #     HOST_IP   = self.public_ip,
+  #     CLIENT_IP = var.client_private_ip
+  #   })
+  # }
 
-  provisioner "remote-exec" {
-    inline = ["sh /tmp/init.sh"]
-  }
-  # user_data = file("modules/client/init.sh")
+  # provisioner "remote-exec" {
+  #   inline = ["sh /tmp/init.sh"]
+  # }
+  user_data = templatefile("modules/debezium/init.sh.tpl", {
+    CLIENT_IP = var.client_private_ip
+  })
 
-  # Add user_data
 
   tags = {
     Name = "${var.name}-debezium"
