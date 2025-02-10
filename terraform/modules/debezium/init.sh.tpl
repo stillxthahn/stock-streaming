@@ -16,9 +16,10 @@ git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/debezium
 sudo docker-compose up -d
 sudo docker ps -a
-until [[ -n "$(docker-compose ps --services --filter state=healthy)" ]]; do 
   echo "Kafka connector is unhealthy, retrying in 3s..."
-  sleep 3
+while [[ "$(docker inspect --format "{{.State.Health.Status }}" debezium-connect-1)" != "healthy" ]]; do 
+	sleep 3; 
+	echo "Kafka connector is unhealthy, retrying in 3s...";
 done
 # localhost -> curl: (56) Recv failure: Connection reset by peer
 # HOST_IP -> curl: connection refused
