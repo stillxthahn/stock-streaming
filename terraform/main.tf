@@ -11,7 +11,9 @@ terraform {
 
 
 provider "aws" {
-  region = var.region
+  region     = var.region
+  access_key = var.access_key
+  secret_key = var.secret_key
 }
 
 locals {
@@ -72,3 +74,18 @@ module "debezium" {
   client_sg_id      = module.client.client_sg_id
 }
 
+module "spark" {
+  source = "./modules/spark"
+
+  name = local.base_name
+
+  access_key = var.access_key
+  secret_key = var.secret_key
+
+  region            = var.region
+  vpc_id            = module.vpc.vpc_id
+  private_subnet_id = module.vpc.public_subnets[2]
+
+  debezium_private_ip = module.debezium.debezium_private_ip
+  debezium_sg_id      = module.debezium.debezium_sg_id
+}

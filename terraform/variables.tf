@@ -17,15 +17,18 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable "vpc_cidr_block" {
-  default = "10.0.0.0/16"
+variable "access_key" {
+  type = string
 }
 
-variable "account_id" {
-  default = "381492111228"
+variable "secret_key" {
+  type = string
 }
 
-variable "client_ami_id" {
-  default = "ami-0aaaa55dd4c971421"
-}
+# EXPORT
+# export TF_VAR_region="region"
+# export TF_VAR_access_key="access_key"
+# export TF_VAR_secret_key="secret_key"
+
+
 

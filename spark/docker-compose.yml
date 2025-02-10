@@ -15,12 +15,18 @@ services:
     ports:
       - '9090:8080'
       - '7077:7077'
-    networks:
-      - client_default
+    # networks:
+    #   - client_default
 
   worker:
     image: bitnami/spark:3.5
     environment:
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      - KAFKA_TOPICS=${KAFKA_TOPICS}
+      - REGION=${REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://master:7077
       - SPARK_WORKER_MEMORY=1G
@@ -38,10 +44,10 @@ services:
       - '9091:8081'
     depends_on:
       - master
-    networks:
-      - client_default
+    # networks:
+    #   - client_default
 
 
-networks:
-  client_default:
-    external: true
+# networks:
+#   client_default:
+#     external: true
