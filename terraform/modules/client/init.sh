@@ -11,4 +11,4 @@ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/client
-sudo docker-compose up
+sudo docker-compose up -d

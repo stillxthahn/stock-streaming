@@ -121,6 +121,7 @@ resource "aws_instance" "client" {
   provisioner "remote-exec" {
     script = "modules/client/init.sh"
   }
+  # user_data = file("modules/client/init.sh")
 
   # Add user_data
 
