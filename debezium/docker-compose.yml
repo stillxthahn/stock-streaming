@@ -5,8 +5,8 @@ services:
      - 2181:2181
      - 2888:2888
      - 3888:3888
-    # networks:
-    #   - client_default
+    networks:
+      - client_default
 
   kafka:
     image: quay.io/debezium/kafka:3.0
