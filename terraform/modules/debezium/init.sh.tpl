@@ -3,6 +3,7 @@
 #   sleep 1
 # done
 echo "Target EC2 IP: ${CLIENT_IP}" 
+echo "INSTANCE_PRIVATE_IP: ${INSTANCE_PRIVATE_IP}" 
 sudo apt update -y 
 sudo apt install docker.io -y
 sudo systemctl start docker
@@ -11,7 +12,7 @@ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/debezium
-sudo docker-compose up -d
+sudo INSTANCE_PRIVATE_IP=${INSTANCE_PRIVATE_IP} docker-compose up -d
 sudo docker ps -a
 while [ "$(sudo docker inspect --format "{{.State.Health.Status }}" debezium-connect-1)" != "healthy" ]; do 
 	sleep 3; 

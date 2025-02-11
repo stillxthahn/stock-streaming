@@ -89,7 +89,7 @@ resource "aws_instance" "spark" {
   vpc_security_group_ids = [aws_security_group.spark-sg.id]
 
   user_data = templatefile("modules/spark/init.sh.tpl", {
-    KAFKA_BROKERS         = var.debezium_private_ip
+    KAFKA_BROKERS         = "${var.debezium_private_ip}:9092"
     KAFKA_TOPICS          = "dbserver1.STOCK_STREAMING.IBM_STOCK"
     REGION                = var.region
     AWS_ACCESS_KEY_ID     = var.access_key

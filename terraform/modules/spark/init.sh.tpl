@@ -15,7 +15,7 @@ cd stock-streaming/spark
 sudo KAFKA_BROKERS=${KAFKA_BROKERS} KAFKA_TOPICS=${KAFKA_TOPICS} REGION=${REGION} AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} docker-compose up -d
 sudo docker ps -a
 
-while [[ "$(curl -o /dev/null -s -w "%{http_code}" localhost:9091)" != "200" ]]; do 
+while [[ "$(curl -o /dev/null -s -w "%%{http_code}" localhost:9091)" != "200" ]]; do 
 	sleep 3; 
 	echo "Spark worker is unhealthy, waiting for 3s...";
 done
