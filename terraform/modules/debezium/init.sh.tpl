@@ -26,3 +26,4 @@ sudo docker exec debezium-kafka-1 bin/kafka-console-consumer.sh --bootstrap-serv
 # sudo docker exec debezium-kafka-1 bin/kafka-topics.sh --bootstrap-server debezium-kafka-1:9092 --topic dbserver1.STOCK_STREAMING.IBM_STOCK --describe
 
 #  cd /var/lib/cloud/instance to monitor user-data
+# sudo nano /var/log/syslog
