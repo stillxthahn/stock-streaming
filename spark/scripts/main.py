@@ -110,5 +110,5 @@ query = filtered_df.writeStream \
     .option("checkpointLocation", "/tmp/spark-checkpoints/stock") \
     .start(s3_output_path)
 
-
+print("Query started")
 query.awaitTermination()
