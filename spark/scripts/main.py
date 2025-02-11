@@ -7,10 +7,10 @@ from pyspark.sql.types import StringType, StructType, StructField, LongType, Dou
 KAFKA_BROKERS = os.environ.get("KAFKA_BROKERS")
 KAFKA_TOPICS = os.environ.get("KAFKA_TOPICS")
 REGION = os.environ.get("REGION")
-SECRET_NAME = os.environ.get("SECRET_NAME")
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-print("AWS_ACCESS_KEY_ID",AWS_ACCESS_KEY_ID)
+print("KAFKA_BROKERS",KAFKA_BROKERS)
+print("KAFKA_TOPICS",KAFKA_TOPICS)
 s3_bucket = "ibm-stock"
 s3_prefix = "streaming-data"
 s3_output_path = f"s3a://{s3_bucket}/{s3_prefix}"
