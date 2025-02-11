@@ -142,8 +142,7 @@ resource "aws_instance" "debezium" {
   #   inline = ["sh /tmp/init.sh"]
   # }
   user_data = templatefile("modules/debezium/init.sh.tpl", {
-    CLIENT_IP           = var.client_private_ip,
-    INSTANCE_PRIVATE_IP = self.private_ip
+    CLIENT_IP = var.client_private_ip
   })
 
 
