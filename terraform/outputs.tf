@@ -28,3 +28,11 @@ output "debezium_public_ip" {
   value = module.debezium.debezium_public_ip
 }
 
+output "spark_private_ip" {
+  value = module.spark.spark_private_ip
+}
+
+output "spark_public_ip" {
+  value = module.spark.spark_public_ip
+}
+
