@@ -17,6 +17,10 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "s3_stock_folder" {
+  default = "streaming_data"
+}
+
 variable "access_key" {
   type = string
 }
@@ -24,6 +28,7 @@ variable "access_key" {
 variable "secret_key" {
   type = string
 }
+
 
 # EXPORT
 # export TF_VAR_region="region"
