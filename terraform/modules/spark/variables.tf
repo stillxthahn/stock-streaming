@@ -6,3 +6,5 @@ variable "debezium_private_ip" {}
 variable "debezium_sg_id" {}
 variable "access_key" {}
 variable "secret_key" {}
+variable "s3_stock_bucket" {}
+variable "s3_stock_folder" {}

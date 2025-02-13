@@ -3,34 +3,6 @@ resource "aws_security_group" "spark-sg" {
   vpc_id = var.vpc_id
 }
 
-# resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_ipv4" {
-#   security_group_id = aws_security_group.spark-sg.id
-#   cidr_ipv4         = "0.0.0.0/0"
-#   ip_protocol       = "-1" # semantically equivalent to all ports
-# }
-
-# resource "aws_vpc_security_group_ingress_rule" "allow_all_tcp_ipv4" {
-#   security_group_id = aws_security_group.spark-sg.id
-#   cidr_ipv4         = "0.0.0.0/0"
-#   from_port         = 0
-#   ip_protocol       = "tcp"
-#   to_port           = 65535
-# }
-
-# resource "aws_vpc_security_group_ingress_rule" "allow_all_udp_ipv4" {
-#   security_group_id = aws_security_group.spark-sg.id
-#   cidr_ipv4         = "0.0.0.0/0"
-#   from_port         = 0
-#   ip_protocol       = "udp"
-#   to_port           = 65535
-# }
-
-# resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_ipv4" {
-#   security_group_id = aws_security_group.spark-sg.id
-#   cidr_ipv4         = "0.0.0.0/0"
-#   ip_protocol       = "-1" # semantically equivalent to all ports
-# }
-
 
 resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_internal" {
   security_group_id            = aws_security_group.spark-sg.id
@@ -94,6 +66,8 @@ resource "aws_instance" "spark" {
     REGION                = var.region
     AWS_ACCESS_KEY_ID     = var.access_key
     AWS_SECRET_ACCESS_KEY = var.secret_key
+    S3_BUCKET             = var.s3_stock_bucket
+    S3_FOLDER             = var.s3_stock_folder
   })
 
 
