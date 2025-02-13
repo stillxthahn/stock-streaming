@@ -14,7 +14,7 @@ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/spark
-sudo KAFKA_BROKERS=${KAFKA_BROKERS} KAFKA_TOPICS=${KAFKA_TOPICS} REGION=${REGION} AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} S3_BUCKET=${S3_BUCKET} S3_FOLDER=${S3_FOLDER}  docker-compose up -d
+sudo S3_BUCKET=${S3_BUCKET} S3_FOLDER=${S3_FOLDER} KAFKA_BROKERS=${KAFKA_BROKERS} KAFKA_TOPICS=${KAFKA_TOPICS} REGION=${REGION} AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}  docker-compose up -d
 sudo docker ps -a
 
 while [[ "$(curl -o /dev/null -s -w "%%{http_code}" localhost:9091)" != "200" ]]; do 

@@ -19,13 +19,13 @@ services:
   worker:
     image: bitnami/spark:3.5
     environment:
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_FOLDER=${S3_FOLDER}
       - KAFKA_BROKERS=${KAFKA_BROKERS}
       - KAFKA_TOPICS=${KAFKA_TOPICS}
       - REGION=${REGION}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - S3_BUCKET = ${S3_BUCKET}
-      - S3_FOLDER = ${S3_FOLDER}
 
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://master:7077
