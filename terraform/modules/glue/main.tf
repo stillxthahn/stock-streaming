@@ -41,47 +41,54 @@ resource "aws_glue_catalog_table" "catalog_table" {
   table_type = "EXTERNAL_TABLE"
 
   parameters = {
-    EXTERNAL = "TRUE"
+    EXTERNAL                 = "TRUE"
+    "skip.header.line.count" = 1
+    "exclusions"             = "s3://${var.s3_stock_bucket_processed}/${var.s3_stock_folder}/_spark_metadata/**"
+    "classification"         = "csv"
+    "delimiter"              = ","
+    "areColumnsQuoted"       = "false"
+    "typeOfData"             = "file"
+    "compressionType"        = "none"
+    "columnsOrdered"         = "true"
   }
 
   storage_descriptor {
     location      = "s3://${var.s3_stock_bucket_processed}/${var.s3_stock_folder}"
     input_format  = "org.apache.hadoop.mapred.TextInputFormat"
-    output_format = "org.apache.hadoop.mapred.TextInputFormat"
+    output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
 
     ser_de_info {
       name                  = "my-serde"
       serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
 
       parameters = {
-        "field.delim"            = ","
-        "skip.header.line.count" = "1"
+        "field.delim" = ","
       }
     }
 
     columns {
       name = "time"
-      type = "string"
+      type = "bigint"
     }
     columns {
       name = "open"
-      type = "string"
+      type = "double"
     }
     columns {
       name = "high"
-      type = "string"
+      type = "double"
     }
     columns {
       name = "low"
-      type = "string"
+      type = "double"
     }
     columns {
       name = "close"
-      type = "string"
+      type = "double"
     }
     columns {
       name = "volume"
-      type = "string"
+      type = "double"
     }
     columns {
       name = "symbol"
@@ -89,9 +96,8 @@ resource "aws_glue_catalog_table" "catalog_table" {
     }
     columns {
       name = "event_time"
-      type = "string"
+      type = "bigint"
     }
-
   }
 }
 
@@ -111,6 +117,8 @@ resource "aws_glue_job" "glue" {
     "--job-language"        = "python"
     "--job-bookmark-option" = "job-bookmark-enable"
     "--enable-spark-ui"     = "true"
+    "--s3_bucket"           = "${var.s3_stock_bucket}"
+    "--s3_folder"           = "${var.s3_stock_folder}"
     "--catalog_database"    = "${aws_glue_catalog_database.catalog_db.name}"
     "--catalog_table"       = "${aws_glue_catalog_table.catalog_table.name}"
   }

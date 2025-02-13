@@ -105,6 +105,7 @@ module "glue" {
   source = "./modules/glue"
 
   name                      = local.base_name
+  s3_stock_bucket           = local.s3_stock_bucket
   s3_stock_bucket_processed = local.s3_stock_bucket_processed
   s3_stock_folder           = var.s3_stock_folder
   s3_script_bucket          = local.s3_script_bucket
