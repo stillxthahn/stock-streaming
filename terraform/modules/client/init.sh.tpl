@@ -2,6 +2,7 @@
 # until [ -f /var/lib/cloud/instance/boot-finished ]; do
 #   sleep 1
 # done
+echo MYSQL_HOST=${MYSQL_HOST}
 sudo apt update -y 
 sudo apt install docker.io -y
 sudo systemctl start docker
@@ -10,4 +11,5 @@ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/client
-sudo docker-compose up -d
+sudo docker build -t client .
+sudo docker run client -e MYSQL_HOST=${MYSQL_HOST}

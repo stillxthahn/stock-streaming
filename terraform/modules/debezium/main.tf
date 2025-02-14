@@ -139,9 +139,7 @@ resource "aws_instance" "debezium" {
   # provisioner "remote-exec" {
   #   inline = ["sh /tmp/init.sh"]
   # }
-  user_data = templatefile("modules/debezium/init.sh.tpl", {
-    CLIENT_IP = var.client_private_ip
-  })
+  user_data = file("modules/debezium/init.sh")
 
 
   tags = {

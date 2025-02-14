@@ -121,9 +121,11 @@ resource "aws_instance" "client" {
   # provisioner "remote-exec" {
   #   script = "modules/client/init.sh"
   # }
-  user_data = file("modules/client/init.sh")
+  # user_data = file("modules/client/init.sh")
+  user_data = templatefile("modules/client/init.sh.tpl", {
+    MYSQL_HOST = var.database_host
+  })
 
-  # Add user_data
 
   tags = {
     Name = "${var.name}-client"

@@ -61,17 +61,6 @@ module "vpc" {
   enable_dns_support   = true
 }
 
-
-module "client" {
-  source = "./modules/client"
-
-  name = local.base_name
-
-  region           = var.region
-  vpc_id           = module.vpc.vpc_id
-  public_subnet_id = module.vpc.public_subnets[0]
-}
-
 module "debezium" {
   source = "./modules/debezium"
 
@@ -84,6 +73,18 @@ module "debezium" {
 
   client_private_ip = module.client.client_private_ip #Privte client's IP
   client_sg_id      = module.client.client_sg_id
+}
+
+module "client" {
+  source = "./modules/client"
+
+  name = local.base_name
+
+  region           = var.region
+  vpc_id           = module.vpc.vpc_id
+  public_subnet_id = module.vpc.public_subnets[0]
+
+  database_host = module.debezium.debezium_private_ip
 }
 
 module "spark" {
