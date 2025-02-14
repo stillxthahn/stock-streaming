@@ -34,9 +34,9 @@ module "s3" {
   s3_script_bucket          = local.s3_script_bucket
 }
 
-resource "aws_eip" "nat" {
-  count = 1
-}
+# resource "aws_eip" "nat" {
+#   count = 1
+# }
 
 
 module "vpc" {
@@ -54,8 +54,8 @@ module "vpc" {
   enable_nat_gateway     = true
   single_nat_gateway     = true
   one_nat_gateway_per_az = false
-  reuse_nat_ips          = true             # <= Skip creation of EIPs for the NAT Gateways
-  external_nat_ip_ids    = aws_eip.nat.*.id # <= IPs specified here as input to the module
+  # reuse_nat_ips          = true             # <= Skip creation of EIPs for the NAT Gateways
+  # external_nat_ip_ids    = aws_eip.nat.*.id # <= IPs specified here as input to the module
 
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -73,6 +73,8 @@ module "debezium" {
 
   client_private_ip = module.client.client_private_ip #Privte client's IP
   client_sg_id      = module.client.client_sg_id
+
+  depends_on = [module.vpc]
 }
 
 module "client" {
@@ -85,6 +87,8 @@ module "client" {
   public_subnet_id = module.vpc.public_subnets[0]
 
   database_host = module.debezium.debezium_private_ip
+
+  # depends_on = [module.vpc, module.debezium]
 }
 
 module "spark" {
@@ -104,6 +108,8 @@ module "spark" {
 
   s3_stock_bucket = local.s3_stock_bucket
   s3_stock_folder = var.s3_stock_folder
+
+  # depends_on = [module.vpc]
 }
 
 module "glue" {
