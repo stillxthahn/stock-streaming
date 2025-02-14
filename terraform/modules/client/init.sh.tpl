@@ -12,4 +12,4 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo git clone https://github.com/stillxthahn/stock-streaming.git
 cd stock-streaming/client
 sudo docker build -t client .
-sudo docker run -e MYSQL_HOST=${MYSQL_HOST} client
+sudo docker run -e MYSQL_HOST=${MYSQL_HOST} -p 8000:8000 client

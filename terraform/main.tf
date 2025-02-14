@@ -88,7 +88,7 @@ module "client" {
 
   database_host = module.debezium.debezium_private_ip
 
-  # depends_on = [module.vpc, module.debezium]
+  depends_on = [module.vpc]
 }
 
 module "spark" {
@@ -109,7 +109,7 @@ module "spark" {
   s3_stock_bucket = local.s3_stock_bucket
   s3_stock_folder = var.s3_stock_folder
 
-  # depends_on = [module.vpc]
+  depends_on = [module.vpc]
 }
 
 module "glue" {
