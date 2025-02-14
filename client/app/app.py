@@ -16,12 +16,12 @@ INSERT IGNORE INTO IBM_STOCK (time, open, high, low, close, volume, symbol)
 VALUES (%s, %s, %s, %s, %s, %s, %s);
 """
 
-# HOST = os.getenv("MYSQL_HOST", "localhost")
-# print(HOST)
+HOST = os.getenv("MYSQL_HOST")
+print(HOST)
 
 # Connect to the MySQL database
 mysql_connection = mysql.connector.connect(
-    host="localhost",
+    host=HOST,
     port=3306,
     user="root",
     password="root",
