@@ -1,6 +1,7 @@
+import os
 import pandas as pd
 import mysql.connector
-from flask import Flask, jsonify, request, render_template_string
+from flask import Flask, jsonify, render_template_string
 import requests
 
 app = Flask(__name__)
@@ -15,9 +16,12 @@ INSERT IGNORE INTO IBM_STOCK (time, open, high, low, close, volume, symbol)
 VALUES (%s, %s, %s, %s, %s, %s, %s);
 """
 
+# HOST = os.getenv("MYSQL_HOST", "localhost")
+# print(HOST)
+
 # Connect to the MySQL database
 mysql_connection = mysql.connector.connect(
-    host="mysql",
+    host="localhost",
     port=3306,
     user="root",
     password="root",
@@ -53,7 +57,7 @@ def fetch_data():
     """
     Fetch real-time IBM stock data and save it into stock-data.csv.
     """
-    file_name = "/app/stock-data.csv"
+    file_name = "stock-data.csv"
     response = requests.get(API_URL)
     with open(file_name, "wb") as file:
         file.write(response.content)
