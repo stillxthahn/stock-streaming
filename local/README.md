@@ -71,12 +71,12 @@ bash connector/deploy_connector.sh
 ```
 - The connector will stream data from the database ```STOCK_STREAMING``` to the Kafka topic ```dbserver1.STOCK_STREAMING```.
 - The connector will also store the schema changes in the Kafka topic ```schema-changes.STOCK_STREAMING```.
-- You can monitor the connector by accessing the Kafka Connect UI at ```localhost:8003/connectors```.
+- You can monitor the connector by accessing  ```localhost:8003/connectors```.
 - 
 ![](../images/local-debezium-connectors.png)
 
 
-3. **Submit **:
+3. **Submit**:
  - Monitor the Glue job ```dev-stockstreaming-glue-job``` by accessing the AWS Glue console. The job will be triggered **every 5 minutes** to extract data from the S3 bucket datalake and load it into the Glue Data Catalog.
   
 ![](../images/cloud-example-gluejob.png)
