@@ -43,8 +43,8 @@ def home():
       </head>
       <body>
           <h1>Welcome to Stock API</h1>
-          <p>Step 1: Fetch real-time IBM stock data and save it into stock-data.csv using the <code>http://127.0.0.1:5000/fetch</code> endpoint.</p>
-          <p>Step 2: Get real-time stock data per request and insert it into the database using <code>http://127.0.0.1:5000/stock</code> endpoint.</p>
+          <p>Step 1: Fetch real-time IBM stock data and save it into stock-data.csv using the <code>/fetch</code> endpoint.</p>
+          <p>Step 2: Get real-time stock data per request and insert it into the database using <code>/stock</code> endpoint.</p>
         </div>
       </body>
     </html>

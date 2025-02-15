@@ -15,8 +15,8 @@ The workflow includes:
 This project can be deployed in two environments: local and AWS.
 
 ## System Architecture
-- **Local**
-- **AWS**
+- [**Local**](./local-deployment.md)
+- [**AWS**](./terraform/cloud-deployment.md)
 ![Cloud Deployment](./cloud-deployment.png)
 
 
