@@ -34,10 +34,6 @@ module "s3" {
   s3_script_bucket          = local.s3_script_bucket
 }
 
-# resource "aws_eip" "nat" {
-#   count = 1
-# }
-
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
@@ -46,7 +42,7 @@ module "vpc" {
   cidr = "10.0.0.0/16"
 
   azs             = ["us-east-1a"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnets = ["10.0.1.0/24"]
   public_subnets  = ["10.0.101.0/24"]
 
   map_public_ip_on_launch = true
@@ -54,11 +50,24 @@ module "vpc" {
   enable_nat_gateway     = true
   single_nat_gateway     = true
   one_nat_gateway_per_az = false
-  # reuse_nat_ips          = true             # <= Skip creation of EIPs for the NAT Gateways
-  # external_nat_ip_ids    = aws_eip.nat.*.id # <= IPs specified here as input to the module
 
   enable_dns_hostnames = true
   enable_dns_support   = true
+}
+
+module "database" {
+  source = "./modules/database"
+
+  name = local.base_name
+
+  region            = var.region
+  vpc_id            = module.vpc.vpc_id
+  private_subnet_id = module.vpc.private_subnets[0]
+
+  client_sg_id   = module.client.client_sg_id
+  debezium_sg_id = module.debezium.debezium_sg_id
+
+  depends_on = [module.vpc]
 }
 
 module "debezium" {
@@ -66,13 +75,12 @@ module "debezium" {
 
   name = local.base_name
 
-  region = var.region
-  vpc_id = module.vpc.vpc_id
-  # private_subnet_id = module.vpc.private_subnets[0]
+  region            = var.region
+  vpc_id            = module.vpc.vpc_id
   private_subnet_id = module.vpc.private_subnets[0]
 
-  client_private_ip = module.client.client_private_ip #Privte client's IP
-  client_sg_id      = module.client.client_sg_id
+  database_sg_id = module.database.database_sg_id
+  database_host  = module.database.database_private_ip
 
   depends_on = [module.vpc]
 }
@@ -86,7 +94,8 @@ module "client" {
   vpc_id           = module.vpc.vpc_id
   public_subnet_id = module.vpc.public_subnets[0]
 
-  database_host = module.debezium.debezium_private_ip
+  database_sg_id = module.database.database_sg_id
+  database_host  = module.database.database_private_ip
 
   depends_on = [module.vpc]
 }
@@ -101,7 +110,7 @@ module "spark" {
 
   region            = var.region
   vpc_id            = module.vpc.vpc_id
-  private_subnet_id = module.vpc.private_subnets[1]
+  private_subnet_id = module.vpc.private_subnets[0]
 
   debezium_private_ip = module.debezium.debezium_private_ip
   debezium_sg_id      = module.debezium.debezium_sg_id

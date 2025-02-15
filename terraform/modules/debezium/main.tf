@@ -3,27 +3,6 @@ resource "aws_security_group" "debezium-sg" {
   vpc_id = var.vpc_id
 }
 
-# resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_ipv4" {
-#   security_group_id = aws_security_group.debezium-sg.id
-#   cidr_ipv4         = "0.0.0.0/0"
-#   ip_protocol       = "-1" # semantically equivalent to all ports
-# }
-
-resource "aws_vpc_security_group_ingress_rule" "allow_all_tcp_ipv4" {
-  security_group_id = aws_security_group.debezium-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 0
-  ip_protocol       = "tcp"
-  to_port           = 65535
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_all_udp_ipv4" {
-  security_group_id = aws_security_group.debezium-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 0
-  ip_protocol       = "udp"
-  to_port           = 65535
-}
 
 resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_ipv4" {
   security_group_id = aws_security_group.debezium-sg.id
@@ -32,29 +11,13 @@ resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_ipv4" {
 }
 
 
-resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_internal" {
+resource "aws_vpc_security_group_ingress_rule" "allow_all_traffic_database" {
   security_group_id = aws_security_group.debezium-sg.id
   # cidr_ipv4                    = "0.0.0.0/0"
   ip_protocol                  = "-1" # semantically equivalent to all ports
-  referenced_security_group_id = var.client_sg_id
+  referenced_security_group_id = var.database_sg_id
 }
 
-
-resource "aws_vpc_security_group_egress_rule" "allow_all_tcp_ipv4" {
-  security_group_id = aws_security_group.debezium-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 0
-  ip_protocol       = "tcp"
-  to_port           = 65535
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_all_udp_ipv4" {
-  security_group_id = aws_security_group.debezium-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 0
-  ip_protocol       = "udp"
-  to_port           = 65535
-}
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   security_group_id = aws_security_group.debezium-sg.id
@@ -62,15 +25,12 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_external" {
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_database" {
   security_group_id = aws_security_group.debezium-sg.id
   # cidr_ipv4                    = "0.0.0.0/0"
   ip_protocol                  = "-1" # semantically equivalent to all ports
-  referenced_security_group_id = var.client_sg_id
+  referenced_security_group_id = var.database_sg_id
 }
-
-
-
 
 
 data "aws_ami" "ubuntu" {
@@ -87,31 +47,6 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-# resource "tls_private_key" "pk" {
-#   algorithm = "RSA"
-#   rsa_bits  = 4096
-# }
-
-# resource "aws_key_pair" "kp" {
-#   key_name   = "${var.name}-debezium-kp" # Create a "myKey" to AWS!!
-#   public_key = tls_private_key.pk.public_key_openssh
-# }
-
-# module "ec2_client" {
-#   source = "terraform-aws-modules/ec2-instance/aws"
-
-#   name = "${var.name}-debezium"
-#   # key_name = aws_key_pair.kp.key_name
-#   ami = data.aws_ami.ubuntu.id
-
-#   subnet_id              = var.private_subnet_id
-#   vpc_security_group_ids = [aws_security_group.debezium-sg.id]
-#   instance_type          = "t2.medium"
-
-#   user_data = templatefile("modules/debezium/init.sh.tpl", {
-#     CLIENT_IP = var.client_private_ip
-#   })
-# }
 
 resource "aws_instance" "debezium" {
   ami                    = data.aws_ami.ubuntu.id
@@ -119,28 +54,9 @@ resource "aws_instance" "debezium" {
   subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [aws_security_group.debezium-sg.id]
 
-  # key_name = aws_key_pair.kp.key_name
-
-  # connection {
-  #   type        = "ssh"
-  #   user        = "ubuntu"
-  #   host        = self.public_ip
-  #   private_key = tls_private_key.pk.private_key_pem
-  # }
-
-  # provisioner "file" {
-  #   destination = "/tmp/init.sh"
-  #   content = templatefile("modules/debezium/init.sh.tpl", {
-  #     HOST_IP   = self.public_ip,
-  #     CLIENT_IP = var.client_private_ip
-  #   })
-  # }
-
-  # provisioner "remote-exec" {
-  #   inline = ["sh /tmp/init.sh"]
-  # }
-  user_data = file("modules/debezium/init.sh")
-
+  user_data = templatefile("modules/debezium/init.sh.tpl", {
+    MYSQL_HOST = var.database_host
+  })
 
   tags = {
     Name = "${var.name}-debezium"
