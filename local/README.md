@@ -1,20 +1,20 @@
 # Realtime Data Streaming | Data Engineering Project (Local Deployment)
 
 ## Introduction 
-This deployment uses **Terraform** to provision and manage the necessary AWS infrastructure.
+This section will guide you through the deployment of the project on your local machine. The project uses **Docker** to containerize the application and **Docker Compose** to manage the services.
 
 ## System Architecture
-![Cloud Deployment](../images/cloud-architecture.png)
+![Local Deployment](../images/local-architecture.png)
 
 ## Prerequisites
-- Terraform 1.10.5
+- Docker
 - AWS Access Key, AWS Secret key
 
 ## Getting Started
 1.  **Clone the repository**:
     ```bash
     git clone https://github.com/stillxthahn/stock-streaming
-	cd stock-streaming/terraform
+	cd stock-streaming/local
     ```
 
 2. **Setting up environment variables**:

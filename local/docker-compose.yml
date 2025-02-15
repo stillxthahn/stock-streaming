@@ -1,0 +1,33 @@
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    volumes:
+      - ./mysql/stock.sql:/docker-entrypoint-initdb.d/stock.sql
+      - ./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  client:
+    container_name: client
+    build: ../docker/client
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s

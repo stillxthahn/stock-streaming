@@ -3,6 +3,9 @@
 ## Introduction 
 This deployment uses **Terraform** to provision and manage the necessary AWS infrastructure.
 
+
+> **Note:** This deployment will charge you for the resources used in AWS. Please make sure to destroy the infrastructure after you are done with the project.
+
 ## System Architecture
 ![Cloud Deployment](../images/cloud-architecture.png)
 
@@ -63,12 +66,13 @@ Inital output will be:
 ![](../images/cloud-example-gluejob.png)
 
 4. **Querying the data with Athena**:
- - Query the data using Athena by accessing the AWS Athena console. You can run the following query to get the data from the ```123```database.
+ - Query the data using Athena by accessing the AWS Athena console. You can run the following query to get the data from the ```dev-stockstreaming-catalog-db``` database.
 
 ```sql
+SELECT * FROM streaming_data
 ```
 
-![](../images/cloud-example-query.png)
+![](../images/cloud-example-athena.png)
 
 5. **Destroying infrastructure**:
  - Destroy the infrastructure using the following command:
