@@ -32,7 +32,7 @@ This deployment uses **Terraform** to provision and manage the necessary AWS inf
 	terraform plan
 	terraform apply
     ```
-
+	
 	Your infrastructure should now be created and it takes about 4-5 minutes to complete.
 
 Inital output will be:
@@ -40,6 +40,8 @@ Inital output will be:
 ![](../images/cloud-output.png)
 
 ## How-to Guide
+> **Note:** Your instances will take a few minutes to initiate user data. Please wait for about 1-2 minutes before accessing the instances.
+
 1. **Accessing client instance**:
  - You can access the client instance using the public IP address provided in the output with port 8080.
 
