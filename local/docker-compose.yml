@@ -23,7 +23,8 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     restart: on-failure
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
@@ -52,6 +53,7 @@ services:
      - 9092:9092
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
+
 
   connect:
     container_name: connect
@@ -100,9 +102,8 @@ services:
       - S3_FOLDER=streaming_data
       - KAFKA_BROKERS=kafka:9092
       - KAFKA_TOPICS=dbserver1.STOCK_STREAMING.IBM_STOCK
-      # - REGION=${REGION}
-      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_ACCESS_KEY_ID=minio-root-user
+      - AWS_SECRET_ACCESS_KEY=minio-root-password
 
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://master:7077
@@ -113,12 +114,10 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
       - SPARK_USER=spark
-    env_file:
-      - .env
     volumes:
       -  ../docker/spark/scripts:/opt/spark-scripts
     ports:
       - '9091:8081'
     depends_on:
       - master
-    command: ["/opt/bitnami/spark/bin/spark-submit", "--master", "spark://master:7077", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0", "/opt/spark-scripts/main.py"]
+    # command: ["/opt/bitnami/spark/bin/spark-submit", "--master", "spark://master:7077", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0", "/opt/spark-scripts/main.py"]

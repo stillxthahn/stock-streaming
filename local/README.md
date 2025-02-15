@@ -47,7 +47,7 @@ This section will guide you through the deployment of the project on your local 
 - Deploy the MySQL connector to stream data from the MySQL database to Kafka by running the following command.
 
 ```bash
-bash connector/deploy_connector.sh
+    bash connector/deploy_connector.sh
 ```
 
 - The script simply sends a POST request to the Kafka Connect REST API to deploy the MySQL connector. The connector configuration is stored in the ```/connector/connector-config.json``` file. 

@@ -1,13 +1,17 @@
-minio:
-    image: minio/minio
-    container_name: datalake-minio
-    hostname: minio
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      # - minio_storage:/data
-    environment:
-      MINIO_ACCESS_KEY: minio_access_key
-      MINIO_SECRET_KEY: minio_secret_key
-    command: server --console-address ":9001" /data
+services:
+  minio:
+      image: minio/minio
+      container_name: datalake-minio
+      hostname: minio
+      ports:
+        - "9000:9000"
+        - "9001:9001"
+      volumes:
+        - /data:/data
+      environment:
+        # - MINIO_ACCESS_KEY=minio_access_key
+        # - MINIO_SECRET_KEY=minio_secret_key
+        - MINIO_ROOT_USER=minio-root-user
+        - MINIO_ROOT_PASSWORD=minio-root-password
+
+      command: server --console-address ":9001" /data
