@@ -3,8 +3,8 @@ services:
     container_name: mysql
     image: mysql:5.7
     volumes:
-      - ./mysql/stock.sql:/docker-entrypoint-initdb.d/stock.sql
-      - ./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ../docker/database/mysql/stock.sql:/docker-entrypoint-initdb.d/stock.sql
+      - ../docker/database/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
@@ -31,3 +31,91 @@ services:
       timeout: 5s
       retries: 5
       start_period: 60s
+
+
+  zookeeper:
+    container_name: zookeeper
+    image: quay.io/debezium/zookeeper:3.0
+    ports:
+     - 2181:2181
+     - 2888:2888
+     - 3888:3888
+
+  kafka:
+    container_name: kafka
+    image: quay.io/debezium/kafka:3.0
+    links:
+     - zookeeper
+    depends_on:
+      - zookeeper
+    ports:
+     - 9092:9092
+    environment:
+     - ZOOKEEPER_CONNECT=zookeeper:2181
+
+  connect:
+    container_name: connect
+    image: quay.io/debezium/connect:3.0
+    links:
+     - kafka
+     - mysql
+    ports:
+     - 8083:8083
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+     - BOOTSTRAP_SERVERS=kafka:9092
+     - GROUP_ID=1
+     - CONFIG_STORAGE_TOPIC=my_connect_configs
+     - OFFSET_STORAGE_TOPIC=my_connect_offsets
+     - STATUS_STORAGE_TOPIC=my_connect_statuses
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost:8083/connectors"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+
+  master:
+    container_name: master
+    image: bitnami/spark:3.5
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+    volumes:
+    - ./scripts:/opt/spark-scripts
+    ports:
+      - '9090:8080'
+      - '7077:7077'
+
+  worker:
+    container_name: worker
+    image: bitnami/spark:3.5
+    environment:
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_FOLDER=${S3_FOLDER}
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      - KAFKA_TOPICS=${KAFKA_TOPICS}
+      - REGION=${REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://master:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+    volumes:
+      - ./scripts:/opt/spark-scripts
+    ports:
+      - '9091:8081'
+    depends_on:
+      - master

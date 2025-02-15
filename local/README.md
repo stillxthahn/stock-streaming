@@ -20,28 +20,21 @@ This section will guide you through the deployment of the project on your local 
 2. **Setting up environment variables**:
 
 	```bash
-	export TF_VAR_access_key="your-access-key"
-	export TF_VAR_secret_key="your_secret_key"
+	123
 	```
 
-	> **Note:** On Windows, you can set these variables in environment variables under System Properties.
 
-3. **Creating infrastructure**:
+3. **Build and run docker containers**:
 	```bash
-   	terraform init
-	terraform plan
-	terraform apply
+   	docker-compose up
     ```
 
-	Your infrastructure should now be created and it takes about 4-5 minutes to complete.
+	Your containers should now be created and it takes about 4-5 minutes to complete.
 
-Inital output will be:
-
-![](../images/cloud-output.png)
 
 ## How-to Guide
-1. **Accessing client instance**:
- - You can access the client instance using the public IP address provided in the output with port 8080.
+1. **Accessing client container**:
+ - You can access the client container ```localhost:8000```. The client container is a Flask application that interacts with the API to fetch and insert data into the database.
 
 ![](../images/cloud-example-client.png)
 
@@ -49,13 +42,41 @@ Inital output will be:
 
 ![](../images/cloud-example-client-stock.png)
   
-2. **Monitoring Data lake**:
- - Monitor the data lake by accessing the S3 bucket ```dev-stockstreaming-ibm```. It will store all the data in the form of csv files.
+2. **Deploying the MySQL connector**:
 
-![](../images/cloud-example-datalake.png)
+- Deploy the MySQL connector to stream data from the MySQL database to Kafka by running the following command.
+
+```bash
+bash connector/deploy_connector.sh
+```
+
+- The script simply sends a POST request to the Kafka Connect REST API to deploy the MySQL connector. The connector configuration is stored in the ```/connector/connector-config.json``` file. 
+```json
+{
+    "name": "stock-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "tasks.max": "1",
+        "database.hostname": "mysql",
+        "database.port": "3306",
+        "database.user": "root",
+		"database.password": "root",
+        "database.server.id": "184054",
+        "topic.prefix": "dbserver1",
+        "database.include.list": "STOCK_STREAMING",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
+        "schema.history.internal.kafka.topic": "schema-changes.STOCK_STREAMING"
+    }
+}
+```
+- The connector will stream data from the database ```STOCK_STREAMING``` to the Kafka topic ```dbserver1.STOCK_STREAMING```.
+- The connector will also store the schema changes in the Kafka topic ```schema-changes.STOCK_STREAMING```.
+- You can monitor the connector by accessing the Kafka Connect UI at ```localhost:8003/connectors```.
+- 
+![](../images/local-debezium-connectors.png)
 
 
-3. **Monitoring Glue Job**:
+3. **Submit **:
  - Monitor the Glue job ```dev-stockstreaming-glue-job``` by accessing the AWS Glue console. The job will be triggered **every 5 minutes** to extract data from the S3 bucket datalake and load it into the Glue Data Catalog.
   
 ![](../images/cloud-example-gluejob.png)

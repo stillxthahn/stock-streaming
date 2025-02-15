@@ -22,8 +22,6 @@ services:
      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${INSTANCE_PRIVATE_IP}:9092
      - KAFKA_ADVERTISED_HOST_NAME=${INSTANCE_PRIVATE_IP}
      - KAFKA_ADVERTISED_PORT=9092
-    # networks:
-    #   - client_default
 
 
   connect:
@@ -46,9 +44,3 @@ services:
       interval: 10s
       timeout: 30s
       retries: 5
-    # networks:
-    #   - client_default
-
-# networks:
-#   client_default:
-#     external: true

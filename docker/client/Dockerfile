@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . /app
 
-ENV MYSQL_HOST=localhost
+ENV MYSQL_HOST=mysql
 
 EXPOSE 8000
 
