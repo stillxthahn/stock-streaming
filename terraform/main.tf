@@ -55,73 +55,92 @@ module "vpc" {
   enable_dns_support   = true
 }
 
-module "database" {
-  source = "./modules/database"
+module "ec2" {
+  source = "./modules/ec2"
 
   name = local.base_name
 
+  access_key        = var.access_key
+  secret_key        = var.secret_key
   region            = var.region
   vpc_id            = module.vpc.vpc_id
+  public_subnet_id  = module.vpc.public_subnets[0]
   private_subnet_id = module.vpc.private_subnets[0]
-
-  client_sg_id   = module.client.client_sg_id
-  debezium_sg_id = module.debezium.debezium_sg_id
-
-  depends_on = [module.vpc]
-}
-
-module "debezium" {
-  source = "./modules/debezium"
-
-  name = local.base_name
-
-  region            = var.region
-  vpc_id            = module.vpc.vpc_id
-  private_subnet_id = module.vpc.private_subnets[0]
-
-  database_sg_id = module.database.database_sg_id
-  database_host  = module.database.database_private_ip
-
-  depends_on = [module.vpc]
-}
-
-module "client" {
-  source = "./modules/client"
-
-  name = local.base_name
-
-  region           = var.region
-  vpc_id           = module.vpc.vpc_id
-  public_subnet_id = module.vpc.public_subnets[0]
-
-  database_sg_id = module.database.database_sg_id
-  database_host  = module.database.database_private_ip
-
-  depends_on = [module.vpc]
-}
-
-module "spark" {
-  source = "./modules/spark"
-
-  name = local.base_name
-
-  access_key = var.access_key
-  secret_key = var.secret_key
-
-  region            = var.region
-  vpc_id            = module.vpc.vpc_id
-  private_subnet_id = module.vpc.private_subnets[0]
-
-  debezium_private_ip = module.debezium.debezium_private_ip
-  debezium_sg_id      = module.debezium.debezium_sg_id
 
   s3_stock_bucket_endpoint = module.s3.s3_stock_bucket_endpoint
   s3_stock_bucket          = local.s3_stock_bucket
   s3_stock_folder          = var.s3_stock_folder
 
-
   depends_on = [module.vpc]
 }
+
+# module "database" {
+#   source = "./modules/database"
+
+#   name = local.base_name
+
+#   region            = var.region
+#   vpc_id            = module.vpc.vpc_id
+#   private_subnet_id = module.vpc.private_subnets[0]
+
+#   client_sg_id   = module.client.client_sg_id
+#   debezium_sg_id = module.debezium.debezium_sg_id
+
+#   depends_on = [module.vpc]
+# }
+
+# module "debezium" {
+#   source = "./modules/debezium"
+
+#   name = local.base_name
+
+#   region            = var.region
+#   vpc_id            = module.vpc.vpc_id
+#   private_subnet_id = module.vpc.private_subnets[0]
+
+#   database_sg_id = module.database.database_sg_id
+#   database_host  = module.database.database_private_ip
+
+#   depends_on = [module.vpc]
+# }
+
+# module "client" {
+#   source = "./modules/client"
+
+#   name = local.base_name
+
+#   region           = var.region
+#   vpc_id           = module.vpc.vpc_id
+#   public_subnet_id = module.vpc.public_subnets[0]
+
+#   database_sg_id = module.database.database_sg_id
+#   database_host  = module.database.database_private_ip
+
+#   depends_on = [module.vpc]
+# }
+
+# module "spark" {
+#   source = "./modules/spark"
+
+#   name = local.base_name
+
+#   access_key = var.access_key
+#   secret_key = var.secret_key
+
+#   region            = var.region
+#   vpc_id            = module.vpc.vpc_id
+#   private_subnet_id = module.vpc.private_subnets[0]
+
+#   debezium_private_ip = module.debezium.debezium_private_ip
+#   debezium_sg_id      = module.debezium.debezium_sg_id
+
+#   s3_stock_bucket_endpoint = module.s3.s3_stock_bucket_endpoint
+#   s3_stock_bucket          = local.s3_stock_bucket
+#   s3_stock_folder          = var.s3_stock_folder
+
+
+#   depends_on = [module.vpc]
+# }
 
 module "glue" {
   source = "./modules/glue"

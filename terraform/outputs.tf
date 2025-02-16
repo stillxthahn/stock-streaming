@@ -13,19 +13,19 @@ output "public_subnets" {
 }
 
 output "client_public_ip" {
-  value = module.client.client_public_ip
+  value = module.ec2.client_public_ip
 }
 
 output "database_private_ip" {
-  value = module.database.database_private_ip
+  value = module.ec2.database_private_ip
 }
 
 output "debezium_private_ip" {
-  value = module.debezium.debezium_private_ip
+  value = module.ec2.debezium_private_ip
 }
 
 output "spark_private_ip" {
-  value = module.spark.spark_private_ip
+  value = module.ec2.spark_private_ip
 }
 
 
