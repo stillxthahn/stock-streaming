@@ -17,14 +17,7 @@ This section will guide you through the deployment of the project on your local 
 	cd stock-streaming/local
     ```
 
-2. **Setting up environment variables**:
-
-	```bash
-	123
-	```
-
-
-3. **Build and run docker containers**:
+2. **Build and run docker containers**:
 	```bash
    	docker-compose up
     ```
@@ -72,29 +65,24 @@ This section will guide you through the deployment of the project on your local 
 - The connector will stream data from the database ```STOCK_STREAMING``` to the Kafka topic ```dbserver1.STOCK_STREAMING```.
 - The connector will also store the schema changes in the Kafka topic ```schema-changes.STOCK_STREAMING```.
 - You can monitor the connector by accessing  ```localhost:8003/connectors```.
-- 
+
 ![](../images/local-debezium-connectors.png)
 
 
-3. **Submit**:
- - Monitor the Glue job ```dev-stockstreaming-glue-job``` by accessing the AWS Glue console. The job will be triggered **every 5 minutes** to extract data from the S3 bucket datalake and load it into the Glue Data Catalog.
-  
-![](../images/cloud-example-gluejob.png)
-
-4. **Querying the data with Athena**:
- - Query the data using Athena by accessing the AWS Athena console. You can run the following query to get the data from the ```123```database.
-
-```sql
-```
-
-![](../images/cloud-example-query.png)
-
-5. **Destroying infrastructure**:
- - Destroy the infrastructure using the following command:
+**1. Submit spark streaming job**:
+ - Submit the Spark streaming job to consume data from the Kafka topic and write it to the S3 bucket by running the following command.
 
 ```bash
-	terraform destroy
+    docker exec worker /opt/bitnami/spark/bin/spark-submit --master spark://master:7077  --deploy-mode client --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0 /opt/spark-scripts/main.py
 ```
+ - Monitor the Spark job by accessing the Spark UI at ```localhost:9091```.
+
+![](../images/local-spark-ui.png)
+
+4. **Accessing the S3 bucket**:
+ - You can access the S3 bucket by accessing the MinIO web interface at ```localhost:9001```.
+
+![](../images/local-minio-bucket.png)
 
 ---
 
