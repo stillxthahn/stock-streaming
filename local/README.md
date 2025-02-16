@@ -50,7 +50,7 @@ This section will guide you through the deployment of the project on your local 
     bash connector/deploy_connector.sh
 ```
 
-- The script simply sends a POST request to the Kafka Connect REST API to deploy the MySQL connector. The connector configuration is stored in the ```/connector/connector-config.json``` file. 
+- The script simply sends a POST request to the Kafka Connect REST API to deploy the MySQL connector and create a topic. The connector configuration is stored in the ```/connector/connector-config.json``` file. 
 ```json
 {
     "name": "stock-connector",

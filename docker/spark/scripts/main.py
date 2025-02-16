@@ -9,6 +9,7 @@ KAFKA_TOPICS = os.environ.get("KAFKA_TOPICS")
 REGION = os.environ.get("REGION")
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+S3_ENDPOINT = os.environ.get("S3_ENDPOINT")
 S3_BUCKET = os.environ.get("S3_BUCKET")
 S3_FOLDER = os.environ.get("S3_FOLDER")
 s3_output_path = f"s3a://{S3_BUCKET}/{S3_FOLDER}"
@@ -20,13 +21,13 @@ spark = SparkSession \
     .appName("StockAnalyze") \
     .config("spark.hadoop.fs.s3a.access.key", AWS_ACCESS_KEY_ID) \
     .config("spark.hadoop.fs.s3a.secret.key", AWS_SECRET_ACCESS_KEY) \
-    .config("spark.hadoop.fs.s3a.endpoint", "datalake-minio:9000") \
     .config("spark.hadoop.fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
-    .config("spark.hadoop.fs.s3a.path.style.access", "true") \
     .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+    .config("spark.hadoop.fs.s3a.endpoint", S3_ENDPOINT) \
     .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false") \
-    .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.apache.hadoop:hadoop-aws:3.3.2") \
+    .config("spark.hadoop.fs.s3a.path.style.access", "true") \
     .getOrCreate()
+    # .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.apache.hadoop:hadoop-aws:3.3.2") \
 
 print("Spark session started")
 

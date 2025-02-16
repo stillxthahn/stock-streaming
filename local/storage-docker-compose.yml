@@ -15,3 +15,13 @@ services:
         - MINIO_ROOT_PASSWORD=minio-root-password
 
       command: server --console-address ":9001" /data
+  mc:
+      image: minio/mc
+      container_name: minio-mc
+      depends_on:
+        - minio
+      entrypoint: >
+        /bin/sh -c "
+        until (/usr/bin/mc alias set myminio http://minio:9000 minio-root-user minio-root-password) do echo '...waiting...' && sleep 1; done;
+        /usr/bin/mc mb myminio/local-ibm-stock;
+        "

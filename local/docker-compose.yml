@@ -98,6 +98,7 @@ services:
     container_name: worker
     image: bitnami/spark:3.5
     environment:
+      - S3_ENDPOINT=datalake-minio:9000
       - S3_BUCKET=local-ibm-stock
       - S3_FOLDER=streaming_data
       - KAFKA_BROKERS=kafka:9092
