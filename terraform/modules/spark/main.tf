@@ -66,6 +66,7 @@ resource "aws_instance" "spark" {
     REGION                = var.region
     AWS_ACCESS_KEY_ID     = var.access_key
     AWS_SECRET_ACCESS_KEY = var.secret_key
+    S3_ENDPOINT           = var.s3_stock_bucket_endpoint
     S3_BUCKET             = var.s3_stock_bucket
     S3_FOLDER             = var.s3_stock_folder
   })

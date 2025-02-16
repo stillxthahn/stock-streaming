@@ -115,8 +115,10 @@ module "spark" {
   debezium_private_ip = module.debezium.debezium_private_ip
   debezium_sg_id      = module.debezium.debezium_sg_id
 
-  s3_stock_bucket = local.s3_stock_bucket
-  s3_stock_folder = var.s3_stock_folder
+  s3_stock_bucket_endpoint = module.s3.s3_stock_bucket_endpoint
+  s3_stock_bucket          = local.s3_stock_bucket
+  s3_stock_folder          = var.s3_stock_folder
+
 
   depends_on = [module.vpc]
 }
