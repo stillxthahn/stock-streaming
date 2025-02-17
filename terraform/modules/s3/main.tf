@@ -27,7 +27,7 @@ resource "aws_s3_object" "stock_procssed" {
 resource "aws_s3_object" "script" {
   bucket = aws_s3_bucket.script.id
   key    = "glue_script.py"
-  source = "modules/s3/glue_script.py"
+  source = "${path.module}/../../../scripts/glue/main.py"
 }
 
 
