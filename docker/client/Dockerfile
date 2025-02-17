@@ -2,7 +2,7 @@ FROM python:3.7-slim
 
 WORKDIR /app
 
-COPY scripts/client /app
+COPY . /app
 
 
 ENV MYSQL_HOST=mysql

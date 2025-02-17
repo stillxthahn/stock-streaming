@@ -35,51 +35,51 @@ module "s3" {
 }
 
 
-# module "vpc" {
-#   source = "terraform-aws-modules/vpc/aws"
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
 
-#   name = local.base_name
-#   cidr = "10.0.0.0/16"
+  name = local.base_name
+  cidr = "10.0.0.0/16"
 
-#   azs             = ["us-east-1a"]
-#   private_subnets = ["10.0.1.0/24"]
-#   public_subnets  = ["10.0.101.0/24"]
+  azs             = ["us-east-1a"]
+  private_subnets = ["10.0.1.0/24"]
+  public_subnets  = ["10.0.101.0/24"]
 
-#   map_public_ip_on_launch = true
+  map_public_ip_on_launch = true
 
-#   enable_nat_gateway     = true
-#   single_nat_gateway     = true
-#   one_nat_gateway_per_az = false
+  enable_nat_gateway     = true
+  single_nat_gateway     = true
+  one_nat_gateway_per_az = false
 
-#   enable_dns_hostnames = true
-#   enable_dns_support   = true
-# }
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+}
 
-# module "ec2" {
-#   source = "./modules/ec2"
+module "ec2" {
+  source = "./modules/ec2"
 
-#   name = local.base_name
+  name = local.base_name
 
-#   access_key        = var.access_key
-#   secret_key        = var.secret_key
-#   region            = var.region
-#   vpc_id            = module.vpc.vpc_id
-#   public_subnet_id  = module.vpc.public_subnets[0]
-#   private_subnet_id = module.vpc.private_subnets[0]
+  access_key        = var.access_key
+  secret_key        = var.secret_key
+  region            = var.region
+  vpc_id            = module.vpc.vpc_id
+  public_subnet_id  = module.vpc.public_subnets[0]
+  private_subnet_id = module.vpc.private_subnets[0]
 
-#   s3_stock_bucket_endpoint = module.s3.s3_stock_bucket_endpoint
-#   s3_stock_bucket          = local.s3_stock_bucket
-#   s3_stock_folder          = var.s3_stock_folder
+  s3_stock_bucket_endpoint = module.s3.s3_stock_bucket_endpoint
+  s3_stock_bucket          = local.s3_stock_bucket
+  s3_stock_folder          = var.s3_stock_folder
 
-#   depends_on = [module.vpc]
-# }
+  depends_on = [module.vpc]
+}
 
-# module "glue" {
-#   source = "./modules/glue"
+module "glue" {
+  source = "./modules/glue"
 
-#   name                      = local.base_name
-#   s3_stock_bucket           = local.s3_stock_bucket
-#   s3_stock_bucket_processed = local.s3_stock_bucket_processed
-#   s3_stock_folder           = var.s3_stock_folder
-#   s3_script_bucket          = local.s3_script_bucket
-# }
+  name                      = local.base_name
+  s3_stock_bucket           = local.s3_stock_bucket
+  s3_stock_bucket_processed = local.s3_stock_bucket_processed
+  s3_stock_folder           = var.s3_stock_folder
+  s3_script_bucket          = local.s3_script_bucket
+}
