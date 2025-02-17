@@ -19,7 +19,7 @@ This section will guide you through the deployment of the project on your local 
 
 2. **Build and run docker containers**:
 	```bash
-   	docker-compose up
+   	docker-compose up -d
     ```
 
 	Your containers should now be created and it takes about 4-5 minutes to complete.
@@ -80,7 +80,7 @@ This section will guide you through the deployment of the project on your local 
 ![](../images/local-spark-ui.png)
 
 4. **Accessing the S3 bucket**:
- - You can access the S3 bucket by accessing the MinIO web interface at ```localhost:9001```.
+ - You can access the S3 bucket by accessing the MinIO web interface at ```localhost:9001```. The default credentials are ```minio-root-user``` and ```minio-root-password```.
 
 ![](../images/local-minio-bucket.png)
 
