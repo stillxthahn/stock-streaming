@@ -42,7 +42,7 @@ This deployment uses **Terraform** to provision and manage the necessary AWS inf
 Inital output will be:
 
 <!-- ![](../images/cloud-output.png) -->
-```json
+```
 client_public_ip = "98.80.234.111"
 database_private_ip = "10.0.1.109"
 debezium_private_ip = "10.0.1.227"
