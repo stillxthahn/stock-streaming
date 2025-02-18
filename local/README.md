@@ -14,6 +14,7 @@ This section will guide you through the deployment of the project on your local 
 1.  **Clone the repository**:
     ```bash
     git clone https://github.com/stillxthahn/stock-streaming
+	chmod 400 ./stock-streaming/docker/mysql/config/mysql.cnf
 	cd stock-streaming/local
     ```
 
