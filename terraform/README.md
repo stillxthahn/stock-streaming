@@ -41,7 +41,20 @@ This deployment uses **Terraform** to provision and manage the necessary AWS inf
 
 Inital output will be:
 
-![](../images/cloud-output.png)
+<!-- ![](../images/cloud-output.png) -->
+```json
+client_public_ip = "98.80.234.111"
+database_private_ip = "10.0.1.109"
+debezium_private_ip = "10.0.1.227"
+private_subnets = [
+  "subnet-0393c2af028f1c3b6",
+]
+public_subnets = [
+  "subnet-061edd7128617ed4f",
+]
+spark_private_ip = "10.0.1.25"
+vpc_id = "vpc-0611a3b9d89713a87"
+```
 
 ## How-to Guide
 > **Note:** Your instances will take a few minutes to initiate user data. Please wait for about 1-2 minutes before accessing the instances.
@@ -79,7 +92,7 @@ SELECT * FROM streaming_data
  - Destroy the infrastructure using the following command:
 
 ```bash
-	terraform destroy
+terraform destroy
 ```
 
 ---
