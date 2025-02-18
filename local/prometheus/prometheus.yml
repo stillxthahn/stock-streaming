@@ -1,0 +1,11 @@
+global:
+ scrape_interval: 2s
+ evaluation_interval: 2s
+
+scrape_configs:
+ - job_name: minio-job
+   bearer_token: <secret>
+   metrics_path: /minio/v2/metrics/cluster
+   scheme: http
+   static_configs:
+    - targets: ["datalake-minio:9000"]
