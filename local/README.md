@@ -19,11 +19,20 @@ This section will guide you through the deployment of the project on your local 
 
 2. **Build and run docker containers**:
 	```bash
-   	docker-compose up -d
+   	docker-compose -f docker-compose.datalake.yml -f docker-compose.yml up -d
     ```
 
-	Your containers should now be created and it takes about 4-5 minutes to complete.
+	Your containers should now be created and it takes about 5-7 minutes to complete.
 
+3. **Accessing the services**:
+    - Client: ```localhost:8000```
+    - MySQL: on port ```3306``` with username ```root``` and password ```root```
+    - Kafka: on port ```9092```
+    - Kafka connect: ```localhost:8083```
+    - Spark worker: ```localhost:9091```
+    - Minio: ```localhost:9001```
+    - Prometheus: ```localhost:9090```
+    - Grafana: ```localhost:3000``` with username ```admin``` and password ```admin```
 
 ## How-to Guide
 1. **Accessing client container**:
@@ -69,7 +78,7 @@ This section will guide you through the deployment of the project on your local 
 ![](../images/local-debezium-connectors.png)
 
 
-**1. Submit spark streaming job**:
+**3. Submit spark streaming job**:
  - Submit the Spark streaming job to consume data from the Kafka topic and write it to the S3 bucket by running the following command.
 
 ```bash
@@ -79,11 +88,24 @@ This section will guide you through the deployment of the project on your local 
 
 ![](../images/local-spark-ui.png)
 
-4. **Accessing the S3 bucket**:
+4. **Accessing the Minio bucket**:
  - You can access the S3 bucket by accessing the MinIO web interface at ```localhost:9001```. The default credentials are ```minio-root-user``` and ```minio-root-password```.
+ - Each time you access ```localhost:8000/stock```, the data will be written to the S3 bucket.
 
 ![](../images/local-minio-bucket.png)
 
+5. **Accessing Grafana**:
+ - You can access the Grafana dashboard at ```localhost:3000```. The default credentials are ```admin``` and ```admin```.
+ - The dashboard is pre-configured to display the metrics from Prometheus.
+
+![](../images/local-grafana-dashboard.png)
+
+6. **Stopping the services**:
+ - You can stop the services by running the following command.
+
+```bash
+    docker-compose -f docker-compose.datalake.yml -f docker-compose.yml down -v
+```
 ---
 
 <p>&copy; 2025 XuanThanh</p>
