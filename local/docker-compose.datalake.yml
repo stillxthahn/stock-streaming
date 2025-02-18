@@ -1,0 +1,50 @@
+services:
+  # DATALAKE
+  minio:
+      image: minio/minio
+      container_name: datalake-minio
+      hostname: minio
+      ports:
+        - "9000:9000"
+        - "9001:9001"
+      volumes:
+        - /data:/data
+      environment:
+        - MINIO_ROOT_USER=minio-root-user
+        - MINIO_ROOT_PASSWORD=minio-root-password
+        - MINIO_PROMETHEUS_AUTH_TYPE=public
+
+      command: server --console-address ":9001" /data
+  mc:
+      image: minio/mc
+      container_name: minio-mc
+      depends_on:
+        - minio
+      entrypoint: >
+        /bin/sh -c "
+        until (/usr/bin/mc alias set myminio http://minio:9000 minio-root-user minio-root-password) do echo '...waiting...' && sleep 1; done;
+        /usr/bin/mc mb myminio/local-ibm-stock;
+        "
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    ports:
+        - "9090:9090"
+    volumes:
+        - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  
+  grafana: 
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+        - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
