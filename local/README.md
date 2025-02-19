@@ -8,7 +8,6 @@ This section will guide you through the deployment of the project on your local 
 
 ## Prerequisites
 - Docker
-- AWS Access Key, AWS Secret key
 
 ## Getting Started
 1.  **Clone the repository**:
